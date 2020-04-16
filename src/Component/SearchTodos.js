@@ -34,8 +34,8 @@ const SearchTodos = ({ searchHandle, searchItem, searchHandleChange }) => {
         value={searchItem}
         onChange={searchHandleChange}
       />
-      <IconButton onSubmit={searchHandle} className={classes.iconButton}>
-        <SearchIcon />
+      <IconButton onClick={searchHandle} className={classes.iconButton}>
+        <SearchIcon  />
       </IconButton>
     </form>
   );

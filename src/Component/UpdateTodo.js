@@ -1,6 +1,8 @@
 import React from "react";
 import AddIcon from "@material-ui/icons/Add";
+import CancelIcon from '@material-ui/icons/Cancel';
 import { IconButton, InputBase, makeStyles } from "@material-ui/core";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -9,8 +11,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     margin: "auto",
     background: "rgba(0, 0, 0, 0.4)",
-    borderRadius: 10,
-    marginTop: theme.spacing(2),
+    //borderRadius: 10,
   },
   input: {
     marginLeft: theme.spacing(2),
@@ -24,24 +25,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddTodos = ({ todoHandleChange, todoHandle, todo }) => {
+const UpdateTodo = ({updateHandleChange, updateHandle, updateHandleClick, updateList}) => {
   const classes = useStyles();
   return (
-    <form onSubmit={todoHandle} className={classes.root}>
+    <form onSubmit={updateHandle} className={classes.root}>
       <InputBase
         className={classes.input}
-        placeholder="Add a new To do"
-        onChange={todoHandleChange}
-        value={todo}
+        placeholder={`Update todo : ${updateList.value}`}
+        onChange={updateHandleChange}
+        //value={}
       />
       <IconButton
-        onClick={todoHandle}
+        //onClick={updateHandle(todo.value)}
         className={classes.iconButton}
       >
         <AddIcon />
+      </IconButton>
+      <IconButton
+        onClick={updateHandleClick}
+        className={classes.iconButton}
+      >
+        <CancelIcon />
       </IconButton>
     </form>
   );
 };
 
-export default AddTodos;
+export default UpdateTodo;

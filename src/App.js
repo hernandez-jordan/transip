@@ -3,8 +3,13 @@ import "./App.css";
 import SearchTodos from "./Component/SearchTodos";
 import Todos from "./Component/Todos";
 import AddTodos from "./Component/AddTodos";
+import UpdateTodo from "./Component/UpdateTodo";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { Container, List, makeStyles } from "@material-ui/core";
-import axios from 'axios';
+import axios from "axios";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,13 +23,25 @@ const useStyles = makeStyles((theme) => ({
 
 const App = () => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
   const [todo, setTodo] = useState("");
   const [searchItem, setSearchItem] = useState("");
+  const [updateItem, setUpdateItem] = useState("");
+  const [updateList, setUpdateList] = useState([]);
   const [newList, setNewList] = useState([]);
   const [todoItem, setTodoItem] = useState([]);
+  const [isUpdating, setIsUpdating] = useState(false);
   let count = todoItem.length;
   const noItem = "No new to do's!";
-  const apiUrl = 'http://localhost:3001/todos';
+  const apiUrl = "http://localhost:3001/todos";
+
+  useEffect(() => {
+    axios.get(apiUrl).then((res) => {
+      const { todos } = res.data;
+      setTodoItem(todos);
+    });
+  }, []);
+
   const searchHandleChange = (e) => {
     e.preventDefault();
     const search = e.target.value;
@@ -49,7 +66,7 @@ const App = () => {
       setNewList(searchlist);
     } else setNewList(todoItem);
   };
-  // console.log("app = ", newList);
+
   const todoHandleChange = (e) => {
     e.preventDefault();
     setTodo(e.target.value);
@@ -57,53 +74,77 @@ const App = () => {
 
   const todoHandle = (e) => {
     e.preventDefault();
+    setSearchItem("");
     if (todo === "") return;
+
     axios
-    .post(`${apiUrl}/add`, {
-      title: todo,
-    })
-    .then(res => {
-      const { newTodo, message } = res.data;
-      setTodoItem([...todoItem, newTodo]);
-      setTodo("");
-    })
-    .catch(err => {});
+      .post(`${apiUrl}/add`, {
+        title: todo,
+      })
+      .then((res) => {
+        const { newTodo, message } = res.data;
+        setTodoItem([...todoItem, newTodo]);
+        setTodo("");
+        setOpen(true);
+      })
+      .catch((err) => {});
   };
 
   const deleteHandle = (id) => {
     setTodoItem(todoItem.filter((todo) => todo.id !== id));
-    axios.delete(`${apiUrl}/delete/${id}`,)
-    .then(res => {
-      // const { todos } = res.data;
-      // setTodoItem(todos);
-    })
-    .catch(err => {});;
+    axios
+      .delete(`${apiUrl}/delete/${id}`)
+      .then((res) => {
+        // snackbar message
+        // const { todos } = res.data;
+        // setTodoItem(todos);
+      })
+      .catch((err) => {});
+  };
+
+  const updateHandleClick = (todo) => {
+    setIsUpdating(!isUpdating);
+    setUpdateList(todo);
+  };
+
+  const updateHandleChange = (e) => {
+    e.preventDefault();
+    const update = e.target.value;
+    setUpdateItem(update.trim());
   };
 
   const updateHandle = (id, title) => {
-    //@TODO 1. IF user clicks edit button
-    //@TODO 2. Display input component with todo title value (must bed editable)
-    //@TODO 3. display submit button in the input component
-    //@TODO 4. when user clicks submit, send data with axios request 
-
-    // setTodoItem(todoItem.filter((todo) => todo.id !== id));
-    axios.post(`${apiUrl}/update/${id}`, {title})
-    .then(res => {
-      // const { todos } = res.data;
-      // setTodoItem(todos);
-    });
+    setIsUpdating(!isUpdating);
+    updateList.value = updateItem;
+    axios
+      .post(`${apiUrl}/update/${updateList.id}`, { title: updateItem })
+      .then((res) => {
+        //message snackbar
+        // const { todos } = res.data;
+      })
+      .catch((err) => {});
   };
 
-  useEffect(() => {
-    axios.get(apiUrl)
-    .then(res => {
-      const { todos } = res.data;
-      setTodoItem(todos);
-    });
-  },[])
+
+  const Alert = (props) => {
+    
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }  
+  
+  const handleClose = (e) => {
+    setOpen(false);
+  };
+
 
   return (
     <Container className="App">
+      <Snackbar 
+        TransitionProps={{enter: false }} 
+        open={open} 
+        autoHideDuration={6000} 
+        onClose={handleClose} 
+        message="update succes"
+      />
       <h1>To do List</h1>
       <SearchTodos
         searchHandle={searchHandle}
@@ -112,12 +153,25 @@ const App = () => {
       />
       {count ? <p>you have {count} item(s) </p> : null}
       <List className={classes.root}>
+        {isUpdating ? (
+          <UpdateTodo
+            todo={todo}
+            updateList={updateList}
+            updateHandle={updateHandle}
+            updateHandleClick={updateHandleClick}
+            updateHandleChange={updateHandleChange}
+            isUpdating={isUpdating}
+          />
+        ) : null}
         {todoItem.length > 0 ? (
           <Todos
+            setTodo={setTodo}
+            searchItem={searchItem}
             updateHandle={updateHandle}
             todoItem={todoItem}
             deleteHandle={deleteHandle}
             newList={newList}
+            updateHandleClick={updateHandleClick}
           />
         ) : (
           noItem
@@ -133,4 +187,3 @@ const App = () => {
 };
 
 export default App;
-
