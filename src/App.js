@@ -5,7 +5,6 @@ import Todos from "./Component/Todos";
 import AddTodos from "./Component/AddTodos";
 import UpdateTodo from "./Component/UpdateTodo";
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import { Container, List, makeStyles } from "@material-ui/core";
 import axios from "axios";
 
@@ -125,12 +124,6 @@ const App = () => {
       .catch((err) => {});
   };
 
-
-  const Alert = (props) => {
-    
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }  
-  
   const handleClose = (e) => {
     setOpen(false);
   };
