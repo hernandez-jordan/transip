@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgba(0, 0, 0, 0.2)",
     margin: "auto",
     borderRadius: 10,
-  },
+  }
 }));
 
 const App = () => {
@@ -30,6 +30,7 @@ const App = () => {
   const [newList, setNewList] = useState([]);
   const [todoItem, setTodoItem] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [message, setMessage] = useState('')
   let count = todoItem.length;
   const noItem = "No new to do's!";
   const apiUrl = "http://localhost:3001/todos";
@@ -85,6 +86,8 @@ const App = () => {
         setTodoItem([...todoItem, newTodo]);
         setTodo("");
         setOpen(true);
+        setMessage(message)
+        
       })
       .catch((err) => {});
   };
@@ -136,7 +139,7 @@ const App = () => {
         open={open} 
         autoHideDuration={6000} 
         onClose={handleClose} 
-        message="update succes"
+        message={message}
       />
       <h1>To do List</h1>
       <SearchTodos
