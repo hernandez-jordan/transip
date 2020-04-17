@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// create a simple todo schema
 const todoSchema = new Schema({
   title: { 
     type: String, 

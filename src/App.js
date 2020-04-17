@@ -35,6 +35,7 @@ const App = () => {
   const noItem = "No new to do's!";
   const apiUrl = "http://localhost:3001/todos";
 
+  // check if there are items in the database
   useEffect(() => {
     axios.get(apiUrl).then((res) => {
       const { todos } = res.data;
@@ -42,12 +43,14 @@ const App = () => {
     });
   }, []);
 
+  //retrieve the users input
   const searchHandleChange = (e) => {
     e.preventDefault();
     const search = e.target.value;
     setSearchItem(search.trim());
   };
 
+  //compare the users input to the list
   const searchHandle = (e, newList) => {
     e.preventDefault();
     //comparison arrays
@@ -67,11 +70,13 @@ const App = () => {
     } else setNewList(todoItem);
   };
 
+  //retrieve the users input
   const todoHandleChange = (e) => {
     e.preventDefault();
     setTodo(e.target.value);
   };
 
+  //add list to the database
   const todoHandle = (e) => {
     e.preventDefault();
     setSearchItem("");
@@ -92,6 +97,7 @@ const App = () => {
       .catch((err) => {});
   };
 
+  //delete list 
   const deleteHandle = (id) => {
     setTodoItem(todoItem.filter((todo) => todo.id !== id));
     axios
@@ -109,12 +115,14 @@ const App = () => {
     setUpdateList(todo);
   };
 
+  //retrieve the users input
   const updateHandleChange = (e) => {
     e.preventDefault();
     const update = e.target.value;
     setUpdateItem(update.trim());
   };
 
+  //update list
   const updateHandle = (id, title) => {
     setIsUpdating(!isUpdating);
     updateList.value = updateItem;
@@ -127,6 +135,7 @@ const App = () => {
       .catch((err) => {});
   };
 
+  //snackbar handle
   const handleClose = (e) => {
     setOpen(false);
   };

@@ -33,10 +33,9 @@ const UpdateTodo = ({updateHandleChange, updateHandle, updateHandleClick, update
         className={classes.input}
         placeholder={`Update todo : ${updateList.value}`}
         onChange={updateHandleChange}
-        //value={}
       />
       <IconButton
-        //onClick={updateHandle(todo.value)}
+        onClick={updateHandle}
         className={classes.iconButton}
       >
         <AddIcon />
