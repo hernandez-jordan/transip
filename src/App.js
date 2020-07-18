@@ -5,6 +5,8 @@ import Todos from "./Component/Todos";
 import AddTodos from "./Component/AddTodos";
 import UpdateTodo from "./Component/UpdateTodo";
 import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
 import { Container, List, makeStyles } from "@material-ui/core";
 import axios from "axios";
 
@@ -30,7 +32,7 @@ const App = () => {
   const [newList, setNewList] = useState([]);
   const [todoItem, setTodoItem] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
   let count = todoItem.length;
   const noItem = "No new to do's!";
   const apiUrl = "http://localhost:3001/todos";
@@ -139,16 +141,27 @@ const App = () => {
   const handleClose = (e) => {
     setOpen(false);
   };
-
+  
+ 
 
   return (
     <Container className="App">
-      <Snackbar 
-        TransitionProps={{enter: false }} 
-        open={open} 
-        autoHideDuration={6000} 
-        onClose={handleClose} 
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
         message={message}
+        action={
+          <>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </>
+        }
       />
       <h1>To do List</h1>
       <SearchTodos
